@@ -51,31 +51,34 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build
+      - name: Prepare artifacts
+        run: |
+          mkdir -p artifacts
+          mkdir -p out
+
+      - name: Build and publish
         id: build
         uses: docker/build-push-action@v5
         with:
           context: .
-          push: false
-          load: true
+          push: true
           file: Containerfile
-          platforms: linux/amd64,linux/arm64/v8,linux/arm/v7
+          platforms: linux/amd64,linux/arm64/v8 #,linux/arm/v7
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          outputs: |
+            type=local,dest=out
+            type=docker
 
       - name: Copy artifacts
         run: |
           mkdir -p artifacts
-          if [[ $GITHUB_REF_TYPE =~ ^tag$ ]]; then
-            TAG=$GITHUB_REF_NAME
-          else
-            TAG=$GITHUB_SHA
-          fi
-          docker run --rm --entrypoint=cat ghcr.io/${{ github.repository }} /usr/local/bin/mollysocket > artifacts/mollysocket-${{ matrix.TARGET }}-$TAG
-
-      - name: Push
-        run: |
-          docker push --all-tags ghcr.io/${{ github.repository }}
+          tree artifacts
+          tree out
+          for k in $(ls out/); do
+            ARCH=$(basename $k)
+            cp out/$k/target/release/mollysocket artifacts/mollysocket-$ARCH
+          done
 
       - name: Archive artifact
         uses: actions/upload-artifact@v2

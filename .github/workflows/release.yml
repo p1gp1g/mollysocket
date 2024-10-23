@@ -126,6 +126,6 @@ jobs:
         uses: actions/download-artifact@v3
 
       - name: Create release draft
-        run: gh release create -d -t "$GITHUB_REF_NAME" "$GITHUB_REF_NAME" ./artifacts/*
+        run: gh release create -d -t "$GITHUB_REF_NAME" "$GITHUB_REF_NAME" ./artifacts*/*
         env:
           GITHUB_TOKEN: ${{ secrets.PUBLISH_PAT || secrets.GITHUB_TOKEN }}

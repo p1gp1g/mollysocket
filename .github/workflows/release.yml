@@ -104,7 +104,7 @@ jobs:
         with:
           name: artifacts-${{ matrix.flavor }}
           path: |
-            ./artifacts-${{ matrix.flavos }}
+            ./artifacts-${{ matrix.flavor }}
 
   publish:
     name: Publish
@@ -122,7 +122,7 @@ jobs:
           pattern: artifacts-*
           merge-multiple: true
 
-      - run: ls -R artifacts
+      - run: ls -R .
 
       - name: Create release draft
         run: gh release create -d -t "$GITHUB_REF_NAME" "$GITHUB_REF_NAME" ./artifacts/*

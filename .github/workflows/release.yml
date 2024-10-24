@@ -69,7 +69,7 @@ jobs:
 
       - name: Prepare artifacts
         run: |
-          mkdir -p artifacts
+          mkdir -p artifacts-${{ matrix.flavor }}
           mkdir -p out
 
       - name: Build and publish

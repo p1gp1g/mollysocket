@@ -9,8 +9,8 @@ RUN cargo build --release --locked
 RUN rm ./src/main.rs && rmdir ./src
 
 COPY . .
-RUN cargo build --release --locked --bin mollysocket
-
+#RUN cargo build --release --locked --bin mollysocket
+RUN touch /app/target/release/mollysocket 
 
 FROM docker.io/debian:bookworm-slim AS runtime
 WORKDIR app

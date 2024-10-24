@@ -95,7 +95,7 @@ jobs:
             fi
             echo $ARCH
             if [ -f out/$k/usr/local/bin/mollysocket ]; then
-              cp out/$k/usr/local/bin/mollysocket artifacts/mollysocket-$ARCH
+              cp out/$k/usr/local/bin/mollysocket artifacts-{{ matrix.flavor }}/mollysocket-$ARCH
             fi
           done
 
